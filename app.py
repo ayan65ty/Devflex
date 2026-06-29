@@ -1,31 +1,30 @@
 import streamlit as st
 import yt_dlp
 
-st.set_page_config(page_title="Universal Video Downloader", page_icon="📥")
+st.set_page_config(page_title="Universal Downloader", page_icon="📥")
 
 st.title("📥 Universal Video Downloader")
-st.write("Paste a link from YouTube, TikTok, Instagram, Twitter, or Facebook.")
 
-url = st.text_input("Enter URL:")
+# Your PropellerAds Direct Link
+AD_LINK = "https://omg10.com/4/11216275"
+
+url = st.text_input("Paste video link here (YouTube, TikTok, Insta, etc.):")
 
 if st.button("Get Download Link"):
     if not url:
-        st.warning("Please enter a valid URL.")
+        st.warning("Please paste a link first!")
     else:
-        with st.spinner("Extracting..."):
+        # Show the Ad Link clearly
+        st.markdown(f"### [👉 CLICK HERE TO UNLOCK DOWNLOAD]({AD_LINK})")
+        st.info("Please click the link above first to support our service, then return here to download.")
+        
+        with st.spinner("Extracting video..."):
             try:
-                # yt-dlp options to handle all sites
-                ydl_opts = {
-                    'format': 'best',
-                    'quiet': True,
-                }
+                ydl_opts = {'format': 'best', 'quiet': True}
                 with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                     info = ydl.extract_info(url, download=False)
                     video_url = info.get('url')
-                    title = info.get('title', 'Video')
-                
-                st.success(f"Found: {title}")
-                st.markdown(f'<a href="{video_url}" target="_blank">Click here to download {title}</a>', unsafe_allow_html=True)
-                
+                    st.success("Video Found! Your download button is ready.")
+                    st.video(video_url)
             except Exception as e:
-                st.error(f"Error: Could not extract video. The link might be private or broken. ({e})")
+                st.error("Error: Could not extract video. It might be private.")
